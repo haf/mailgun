@@ -1,0 +1,7 @@
+source https://www.nuget.org/api/v2
+
+nuget Chiron
+nuget Fuchu
+nuget Http.fs-prerelease
+nuget NodaTime
+nuget NuGet.CommandLine

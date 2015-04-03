@@ -1,0 +1,13 @@
+
+paket.exe
+bin/
+obj/
+packages/
+.DS_Store
+*.db
+*.suo
+*.userprefs
+AssemblyVersionInfo.cs
+AssemblyVersionInfo.fs
+AssemblyVersionInfo.vb
+build/

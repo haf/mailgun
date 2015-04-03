@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Mailgun.Api.Tests", "Mailgun.Api.Tests\Mailgun.Api.Tests.fsproj", "{7C07E78D-35C1-4DCD-8BCC-43441353C644}"
+EndProject
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Mailgun.Api", "Mailgun.Api\Mailgun.Api.fsproj", "{2AF87460-A0AD-472F-A3F8-FB389BC7D84E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2AF87460-A0AD-472F-A3F8-FB389BC7D84E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF87460-A0AD-472F-A3F8-FB389BC7D84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AF87460-A0AD-472F-A3F8-FB389BC7D84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AF87460-A0AD-472F-A3F8-FB389BC7D84E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C07E78D-35C1-4DCD-8BCC-43441353C644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C07E78D-35C1-4DCD-8BCC-43441353C644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C07E78D-35C1-4DCD-8BCC-43441353C644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C07E78D-35C1-4DCD-8BCC-43441353C644}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
