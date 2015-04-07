@@ -62,7 +62,7 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :compile] do |p|
     m.title       = 'Mailgun'
     m.description = 'A Mailgun F# HTTPS API wrapper'
     m.authors     = 'Henrik Feldt, Logibit AB'
-    m.project_url = 'http://example.com'
+    m.project_url = 'https://github.com/haf/mailgun'
     m.tags        = 'email mail e-mail mailgun api'
     m.version     = ENV['NUGET_VERSION']
   end
