@@ -9,7 +9,6 @@ Usage:
 open System.Net.Mail
 open Mailgun.Api
 open HttpClient
-open Fuchu
 
 let env key =
   match System.Environment.GetEnvironmentVariable key with
