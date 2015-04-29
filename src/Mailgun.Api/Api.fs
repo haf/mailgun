@@ -68,7 +68,7 @@ module internal Impl =
   let BaseUri = "https://api.mailgun.net/v3"
 
   let resource (r : string) =
-    String.Concat [ BaseUri; "/"; r.TrimStart('/') ]
+    Uri (String.Concat [ BaseUri; "/"; r.TrimStart('/') ])
 
   let collection domain (coll : string) =
     resource (String.Concat [ domain; "/"; coll.TrimStart('/') ])
@@ -76,6 +76,10 @@ module internal Impl =
   let mailgunRequest settings methd resource =
     createRequest methd resource
     |> withBasicAuthentication "api" settings.apiKey
+
+  let asString = function
+    | ResponseString str -> str
+    | ResponseBytes bs -> System.Text.Encoding.UTF8.GetString bs
 
   let getMailgunApiResponse (req : Request) =
     async {
@@ -87,10 +91,10 @@ module internal Impl =
         return ClientError ("unexpected 3xx code from server", resp)
       | x when x >= 400 && x < 500 ->
         let err = resp.EntityBody |> Option.get
-        return ClientError ("Request Error from server: " + err, resp)
+        return ClientError ("Request Error from server: " + asString err, resp)
       | _ ->
         let err = resp.EntityBody |> Option.get
-        return ServerError ("Server error: " + err, resp)
+        return ServerError ("Server error: " + asString err, resp)
     }
 
 module Messages =
