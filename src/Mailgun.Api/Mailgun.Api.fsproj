@@ -15,12 +15,19 @@
     <ErrorReport>prompt</ErrorReport>
     <ConsolePause>false</ConsolePause>
     <DocumentationFile>bin\Debug\Mailgun.Api.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <ConsolePause>false</ConsolePause>
     <DocumentationFile>bin\Release\Mailgun.Api.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -32,6 +39,7 @@
   <ItemGroup>
     <Compile Include="AssemblyVersionInfo.fs" />
     <Compile Include="Prelude.fs" />
+    <Compile Include="Logging.fs" />
     <Compile Include="Api.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
@@ -79,8 +87,8 @@
   <Choose>
     <When Condition="($(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6')) Or ($(TargetFrameworkIdentifier) == 'MonoAndroid') Or ($(TargetFrameworkIdentifier) == 'MonoTouch')">
       <ItemGroup>
-        <Reference Include="HttpClient">
-          <HintPath>..\..\packages\Http.fs-prerelease\lib\net40\HttpClient.dll</HintPath>
+        <Reference Include="HttpFs">
+          <HintPath>..\..\packages\Http.fs-prerelease\lib\net40\HttpFs.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

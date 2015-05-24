@@ -1,8 +1,9 @@
 ﻿module Mailgun.Api.Tests
 
+open System
 open System.Net.Mail
 open Mailgun.Api
-open HttpClient
+open HttpFs.Client
 open Fuchu
 
 let env key =
@@ -33,8 +34,9 @@ Yourself."
           attachments = [] }
       let settings = { SendOpts.Create "sandbox60931.mailgun.org" with testMode = true }
       match Messages.send conf settings msg |> Async.RunSynchronously with
-      | Result (_, resp) ->
+      | Result resp ->
         Assert.Equal("correct status code", 200, resp.StatusCode)
+        (resp :> IDisposable).Dispose()
       | other ->
         Tests.failtestf "got %A, but expected valid result" other
     ]

@@ -4,7 +4,7 @@ open System
 open System.IO
 open System.Net.Mail
 open NodaTime
-open HttpClient
+open HttpFs.Client
 
 type Configured =
   { apiKey : string }
@@ -58,9 +58,9 @@ type SendOpts =
 
 type ApiResponse<'T> =
   | ServerError of string * Response
-  | ClientError of string * Response
+  | ClientError of string
   | NotFoundResult of string
-  | Result of 'T * Response
+  | Result of Response
   //| PaginatedResult of 'T * PageState * HttpClient.Response
   | Timeout of Duration
 
@@ -77,24 +77,18 @@ module internal Impl =
     createRequest methd resource
     |> withBasicAuthentication "api" settings.apiKey
 
-  let asString = function
-    | ResponseString str -> str
-    | ResponseBytes bs -> System.Text.Encoding.UTF8.GetString bs
-
   let getMailgunApiResponse (req : Request) =
     async {
-      let! resp = req |> getResponseAsync
+      let! resp = getResponse req
       match resp.StatusCode with
       | x when x < 300 ->
-        return Result ("", resp)
-      | x when x >= 300 && x < 400 ->
-        return ClientError ("unexpected 3xx code from server", resp)
+        return Result resp
       | x when x >= 400 && x < 500 ->
-        let err = resp.EntityBody |> Option.get
-        return ClientError ("Request Error from server: " + asString err, resp)
+        let! err = Response.readBodyAsString resp
+        return ClientError ("Request Error from server: " + err)
       | _ ->
-        let err = resp.EntityBody |> Option.get
-        return ServerError ("Server error: " + asString err, resp)
+        let! err = Response.readBodyAsString resp
+        return ServerError (err, resp)
     }
 
 module Messages =
@@ -119,35 +113,32 @@ module Messages =
 
   let private generateSendBody settings m =
     let emailNameValue formControlName email =
-      NameValue {
-        name = "to"
-        value = (email.ToString())
-      }
+      NameValue ("to", email.ToString())
 
     let optRaw nonPrefixName value =
-      NameValue { name = "o:" + nonPrefixName; value = value }
+      NameValue ("o:" + nonPrefixName, value)
 
     let opt nonPrefixName = function
       | None -> failwith "programming error"
-      | Some x -> NameValue { name = "o:" + nonPrefixName; value = x }
+      | Some x -> NameValue ("o:" + nonPrefixName, x)
 
     let optb nonPrefixName = function
-      | true -> NameValue { name = "o:" + nonPrefixName; value = "yes" }
-      | false -> NameValue { name = "o:" + nonPrefixName; value = "no" }
+      | true -> NameValue ("o:" + nonPrefixName, "yes")
+      | false -> NameValue ("o:" + nonPrefixName, "no")
 
     BodyForm
       [ // data:
-        yield NameValue { name ="from"; value = m.from.ToString() }
+        yield NameValue ("from", m.from.ToString())
         yield! m.``to`` |> List.map (emailNameValue "to")
         yield! m.cc |> List.map (emailNameValue "cc")
         yield! m.bcc |> List.map (emailNameValue "bcc")
-        yield NameValue { name = "subject"; value = m.subject }
+        yield NameValue ("subject", m.subject)
         match m.body with
-        | TextBody text -> yield NameValue { name = "text"; value = text }
-        | HtmlBody html -> yield NameValue { name = "html"; value = html }
+        | TextBody text -> yield NameValue ("text", text)
+        | HtmlBody html -> yield NameValue ("html", html)
         | TextAndHtmlBody (text, html) ->
-          yield NameValue { name = "text"; value = text }
-          yield NameValue { name = "html"; value = html }
+          yield NameValue ("text", text)
+          yield NameValue ("html", html)
         yield! m.attachments |> List.map(fun file -> FormFile ("attachment", file))
 
         // settings:
@@ -164,9 +155,9 @@ module Messages =
         yield optb "tracking-clicks" settings.trackingClicks
         yield optb "tracking-opens" settings.trackingOpens
         for (headerName, headerValue) in settings.extraHeaders do
-          yield NameValue { name = "h:" + headerName; value = headerValue }
+          yield NameValue ("h:" + headerName, headerValue)
         for (varName, varValue) in settings.extraVars do
-          yield NameValue { name = "v:" + varName; value = varValue }
+          yield NameValue ("v:" + varName, varValue)
       ]
 
   let send config sendOpts (m : Message) =
