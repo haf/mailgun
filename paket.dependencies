@@ -5,3 +5,4 @@ nuget Fuchu
 nuget Http.fs-prerelease
 nuget NodaTime
 nuget NuGet.CommandLine
+nuget FSharp.Core ~> 3
