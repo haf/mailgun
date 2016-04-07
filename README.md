@@ -2,8 +2,10 @@
 
 A F# API for Mailgun.
 
-Usage:
+Sponsored by
+[qvitoo – A.I. bookkeeping](https://qvitoo.com/?utm_source=github&utm_campaign=repos).
 
+### Usage:
 
 ``` fsharp
 open System.Net.Mail
