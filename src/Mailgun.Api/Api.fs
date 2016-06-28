@@ -4,6 +4,7 @@ open System
 open System.IO
 open System.Net.Mail
 open NodaTime
+open Hopac
 open HttpFs.Client
 
 type Configured =
@@ -74,13 +75,13 @@ module internal Impl =
     resource (String.Concat [ domain; "/"; coll.TrimStart('/') ])
 
   let mailgunRequest settings methd resource =
-    createRequest methd resource
-    |> withBasicAuthentication "api" settings.apiKey
+    Request.create methd resource
+    |> Request.basicAuthentication "api" settings.apiKey
 
   let getMailgunApiResponse (req : Request) =
-    async {
+    job {
       let! resp = getResponse req
-      match resp.StatusCode with
+      match resp.statusCode with
       | x when x < 300 ->
         return Result resp
       | x when x >= 400 && x < 500 ->
@@ -162,5 +163,5 @@ module Messages =
 
   let send config sendOpts (m : Message) =
     mailgunRequest config Post (collection sendOpts.domain "messages")
-    |> withBody (generateSendBody sendOpts m)
+    |> Request.body (generateSendBody sendOpts m)
     |> getMailgunApiResponse
