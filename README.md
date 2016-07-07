@@ -32,7 +32,7 @@ XOXOXOXOX
 Yourself."
     attachments = [] }
 let settings = { SendOpts.Create "sandbox60931.mailgun.org" with testMode = true }
-match Messages.send conf settings msg |> Async.RunSynchronously with
+match Messages.send conf settings msg |> Hopac.Job.Global.run with
 | Result (_, resp) ->
   Assert.Equal("correct status code", 200, resp.StatusCode)
 | other ->
