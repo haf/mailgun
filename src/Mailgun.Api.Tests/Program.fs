@@ -15,7 +15,8 @@ let env key =
 let sending =
   // note that since you don't own my domains and Mailgun account it you'll have
   // to alter these tests to run on your machine; send a PR with all that parametised
-
+  let testFileImg : File =
+    ("testImage.png", ContentType.create("image", "png"), Binary (System.IO.File.ReadAllBytes ("../../testImage.png")))
   testList "can send messages" [
     testCase "send to myself" <| fun _ ->
       let conf = { apiKey = env "MAILGUN_API_KEY" }
@@ -25,14 +26,16 @@ let sending =
           cc = []
           bcc = []
           subject = "Hello World åäö"
-          body    = TextBody "Hi!
+          body    = HtmlBody "Hi!
 
 Would you like to go to the prom with me?
-
+Image test:
+<html><img src='cid:testImage.png' alt='no image could be loaded'></html>
 XOXOXOXOX
 Yourself."
-          attachments = [] }
-      let settings = { SendOpts.Create "sandbox60931.mailgun.org" with testMode = true }
+          attachments = []
+          inlineImgs = [testFileImg] }
+      let settings = { SendOpts.Create "sandbox60931.mailgun.org" with testMode = false }
       match Messages.send conf settings msg |> Hopac.Job.Global.run with
       | Result resp ->
         Assert.Equal("correct status code", 200, resp.statusCode)

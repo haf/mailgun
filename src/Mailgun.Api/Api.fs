@@ -24,7 +24,8 @@ type Message =
     subject     : string
     /// always UTF8 encoded
     body        : MailBody
-    attachments : File list }
+    attachments : File list
+    inlineImgs : File list }
 
 type Header = string * string
 
@@ -141,6 +142,7 @@ module Messages =
           yield NameValue ("text", text)
           yield NameValue ("html", html)
         yield! m.attachments |> List.map(fun file -> FormFile ("attachment", file))
+        yield! m.inlineImgs |> List.map(fun file -> FormFile("inline", file))
 
         // settings:
         if Option.isSome settings.tag then
