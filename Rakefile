@@ -59,7 +59,7 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :compile] do |p|
   p.exe     = 'packages/NuGet.CommandLine/tools/NuGet.exe'
   p.with_metadata do |m|
     # m.id          = 'MyProj'
-    m.title       = 'Mailgun'
+    m.title       = 'Mailgun.Api'
     m.description = 'A Mailgun F# HTTPS API wrapper'
     m.authors     = 'Henrik Feldt, Logibit AB'
     m.project_url = 'https://github.com/haf/mailgun'
