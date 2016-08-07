@@ -6,3 +6,5 @@ nuget NodaTime
 nuget NuGet.CommandLine
 nuget Http.fs
 nuget FSharp.Core ~> 3
+
+github logary/logary src/Logary.Facade/Facade.fs

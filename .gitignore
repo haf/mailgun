@@ -11,3 +11,4 @@ AssemblyVersionInfo.cs
 AssemblyVersionInfo.fs
 AssemblyVersionInfo.vb
 build/
+paket-files/

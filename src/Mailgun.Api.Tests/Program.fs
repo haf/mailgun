@@ -5,6 +5,7 @@ open System.Net.Mail
 open Mailgun.Api
 open HttpFs.Client
 open Fuchu
+open Hopac
 
 let env key =
   match System.Environment.GetEnvironmentVariable key with
@@ -39,7 +40,7 @@ Yourself."
           attachments = []
           inlineImgs = [testFileImg] }
       let settings = { SendOpts.Create "sandbox60931.mailgun.org" with testMode = true }
-      match Messages.send conf settings msg |> Hopac.Job.Global.run with
+      match Messages.send conf settings msg |> Hopac.run with
       | Result resp ->
         Assert.Equal("correct status code", 200, resp.statusCode)
         (resp :> IDisposable).Dispose()

@@ -9,6 +9,10 @@ Configuration = ENV['CONFIGURATION'] || 'Release'
 
 Albacore::Tasks::Versionizer.new :versioning
 
+task :paket_replace do
+  sh %{ruby -pi.bak -e "gsub(/namespace Logary.Facade/, 'namespace Mailgun.Logging')" paket-files/logary/logary/src/Logary.Facade/Facade.fs}
+end
+
 desc 'create assembly infos'
 asmver_files :assembly_info do |a|
   a.files = FileList['**/*proj'] # optional, will find all projects recursively by default
@@ -37,10 +41,12 @@ task :paket_bootstrap do
 system 'tools/paket.bootstrapper.exe', clr_command: true unless File.exists? 'tools/paket.exe'
 end
 
-desc 'restore all nugets as per the packages.config files'
-task :restore => :paket_bootstrap do
+task :paket_restore do
   system 'tools/paket.exe', 'restore', clr_command: true
 end
+
+desc 'restore all nugets as per the packages.config files'
+task :restore => [:paket_bootstrap, :paket_restore, :paket_replace]
 
 desc 'Perform full build'
 build :compile => [:versioning, :restore, :assembly_info] do |b|
