@@ -8,7 +8,7 @@ NUGET
     FSharp.Core (3.1.2.5)
     Fuchu (1.0.3)
       FSharp.Core (>= 3.1.2.1)
-    Hopac (0.3.6)
+    Hopac (0.3.7)
       FSharp.Core (>= 3.1.2.5)
     Http.fs (3.0.7)
       FSharp.Core (>= 3.1.2.5)
@@ -17,4 +17,4 @@ NUGET
     NuGet.CommandLine (3.4.3)
 GITHUB
   remote: logary/logary
-    src/Logary.Facade/Facade.fs (da61368c9e5f8cf0466d56a3504a81aa64f4011b)
+    src/Logary.Facade/Facade.fs (43d3bc02f20bd600e7c299ceff7e684275e5866a)
